@@ -115,7 +115,7 @@ class DetailScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12,
                           height: 2,
-                        fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.bold;
                         ),
                       ),
                     ],
