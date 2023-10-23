@@ -9,9 +9,10 @@ class DetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           //Detail Header
           Stack( 
             children: [
@@ -31,7 +32,9 @@ class DetailScreen extends StatelessWidget {
 
                 //tombol back utama
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16, 
+                    vertical: 32,
                   ),
                   child: Container(
                     decoration: BoxDecoration(
@@ -55,14 +58,16 @@ class DetailScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                  SizedBox(height: 16,),
+                  const SizedBox(
+                    height: 16,
+                    ),
                   //info atas (nama_candi dan tombol favorit)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         candi.name,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -75,12 +80,15 @@ class DetailScreen extends StatelessWidget {
                   ),
 
                   //info tengah(lokasi, dibangun, tipe)
-                  SizedBox(height: 16,),
+                  const SizedBox
+                   (
+                    height: 16,
+                   ),
                   Row(
                     children: [
                       Icon(Icons.place, color: Colors.red,),
-                      SizedBox(width: 8,),
-                      SizedBox(width: 70,
+                      const SizedBox(width: 8,),
+                      const SizedBox(width: 70,
                         child: Text('Lokasi', style: TextStyle (
                           fontWeight: FontWeight.bold),),),
                       Text(': ${candi.location}',),
@@ -88,8 +96,8 @@ class DetailScreen extends StatelessWidget {
                   Row(
                     children: [
                       Icon(Icons.calendar_month, color: Colors.blue,),
-                      SizedBox(width: 8,),
-                      SizedBox(width: 70,
+                      const SizedBox(width: 8,),
+                      const SizedBox(width: 70,
                         child: Text ('Dibangun', style: TextStyle(
                           fontWeight: FontWeight.bold),),),
                       Text(': ${candi.built}'),
@@ -97,32 +105,32 @@ class DetailScreen extends StatelessWidget {
                   Row(
                     children: [
                       Icon(Icons.house, color: Colors.green,),
-                      SizedBox(width: 8,),
-                      SizedBox(width: 70,
+                      const SizedBox(width: 8,),
+                      const SizedBox(width: 70,
                         child: Text('Tipe', style: TextStyle(
                           fontWeight: FontWeight.bold,),),),
                       Text(': ${candi.type}'),
                     ], ),
-                  SizedBox(height: 16,),
+                  const SizedBox(height: 16,),
                   Divider(color: Colors.deepPurple.shade100,),
-                  SizedBox(height: 16,),
+                  const SizedBox(height: 16,),
 
                   //Info bawah (deskripsi)
-                  Row(
-                    children: [
-                      Text(
-                        candi.description,
-                        style: TextStyle(
-                          fontSize: 12,
-                          height: 2,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                  const Text(
+                    'Deskripsi',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Text(candi.description),
               ],
             ),
           ),
+
          
          //DetailGallery
                   Padding(
@@ -131,10 +139,10 @@ class DetailScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Divider(color: Colors.deepPurple.shade100,),
-                        Text('Galeri', style: TextStyle(
+                        const Text('Galeri', style: TextStyle(
                           fontSize: 16, fontWeight: FontWeight.bold,
                         ),),
-                        SizedBox(height: 10,),
+                        const SizedBox(height: 10,),
                         SizedBox(
                           height: 100,
                           child: ListView.builder(
@@ -182,6 +190,7 @@ class DetailScreen extends StatelessWidget {
                     ),
                   )
         ],
+      ),
       ),
     );
   }     
