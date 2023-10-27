@@ -1,13 +1,14 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class signInScreen extends StatefulWidget {
   signInScreen({super.key});
-  
+
   @override
-  State<signInScreen>createState()=> _signInScreenState();
+  State<signInScreen> createState() => _signInScreenState();
 }
 
-class _signInScreenState extends State<signInScreen {
+class _signInScreenState extends State<signInScreen> {
   //TOD: 1 Deklarasikan variabel
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
