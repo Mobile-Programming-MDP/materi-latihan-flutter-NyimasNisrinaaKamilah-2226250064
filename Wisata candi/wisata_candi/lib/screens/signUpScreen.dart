@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; 
 import 'package:wisata_candi/screens/signInScreen.dart';
 
 class SignUpScreen extends StatefulWidget 
@@ -6,7 +7,7 @@ class SignUpScreen extends StatefulWidget
   const SignUpScreen({super.key});
 
   @override
-  State<SignUpScreen> createState()=> _SignUpScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen>
@@ -15,32 +16,88 @@ class _SignUpScreenState extends State<SignUpScreen>
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  String _errorText="";
+  String _errorText='';
   bool _obscurePassword = true;
 
-  //TODO: 1 membuat fungsi _signUp
-  void _signUp()
+  void _signIn() async
   {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String savedUsername = prefs.getString('username') ?? '';
+    final String savedPassword = prefs.getString('password') ?? '';
+    final String enteredUsername = _usernameController.text.trim();
+    final String enteredPassword = _passwordController.text.trim();
+
+    if(enteredUsername.isEmpty || enteredPassword.isEmpty)
+    {
+      setState(() {
+        _errorText = 'Nama pengguna dan kata sandi harus diisi.';
+      });
+      return;
+    }
+
+     if(savedUsername.isEmpty || savedPassword.isEmpty)
+    {
+      setState(() {
+        _errorText = 'Pengguna belum terdaftar. Silahkan daftar terlebih dahulu.';
+      });
+      return;
+    }
+
+    if(enteredUsername == savedUsername && enteredPassword == savedPassword)
+    {
+      setState(() {
+        _errorText = '';
+        _isSignedIn = true;
+        prefs.setBool('isSignedin', true);
+      });
+
+      //pemanggilan untuk menghapus semua halaman dalam tumpukan navigasi
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+       });
+
+      //Sign in berhasil navigasikan ke layar utama
+      WidgetsBinding.instance.addPostFrameCallback((_) { 
+        Navigator.pushReplacementNamed(context, '/');
+      });
+    }
+    else
+    {
+      setState(() {
+        _errorText = 'Nama pengguna atau Kata sandi salah.';
+      });
+    }
+  }
+
+  //TODO: 1 membuat fungsi _signUp
+  void _signUp() async
+  {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String name = _nameController.text.trim();
     final String username = _usernameController.text.trim();
     final String password = _passwordController.text.trim();
 
-      if(password.length < 8 || !password.contains(RegExp(r'[A-Z]')) || !password.contains(RegExp(r'[a-z]')) || !password.contains(RegExp(r'[0-9]')) || !password.contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]')))
+      if(password.length < 8 || 
+        !password.contains(RegExp(r'[A-Z]')) || 
+        !password.contains(RegExp(r'[a-z]')) || 
+        !password.contains(RegExp(r'[0-9]')) || 
+        !password.contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]')))
       {
         setState(() {
           _errorText = 'Minimal 8 Karakter, kombinasi [A-Z], [a-z], [0-9],[!@#\$%^&*(),.?":{}|<>]';
         });
+        return;
       }
-      else
-      {
-        setState(() {
-          _errorText = "";
-        });
-      }
-
-    print('* Sign Up berhasil! ');
-    print('Nama Pengguna: $username');
-    print('Password: $password');
+      //simpan data pengguna di SharedPreferences
+      prefs.setString('fulname', name);
+      prefs.setString('username', username);
+      prefs.setString('password', password);
+      // print('*** Sign Up berhasil! ');
+      // print('Nama: $name');
+      // print('Nama Pengguna: $username');
+      // print('Password: $password');
+      //buat navigasi ke signinscreen
+      Navigator.pushReplacementNamed(context, '/signin');
   }
 
   //TODO: 2 membuat fungsi dispose
@@ -50,6 +107,7 @@ class _SignUpScreenState extends State<SignUpScreen>
     _nameController.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -61,16 +119,20 @@ class _SignUpScreenState extends State<SignUpScreen>
       ),
       body: Center (
         child: SingleChildScrollView(
-          child: Padding(padding: const EdgeInsets.all(16),
-          child: Form(child: Column(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Form(
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(
+                textCapitalization: TextCapitalization.words,
+                decoration: const InputDecoration(
                   labelText: 'Name',
                   hintText: 'Masukkan Nama Anda',
+                  border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 20),
@@ -79,7 +141,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                 decoration: InputDecoration(
                   labelText: 'Username',
                   hintText: 'Masukkan Username',
-                  errorText: _errorText.isNotEmpty ? _errorText: null,
+                  border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 20),
@@ -91,16 +153,17 @@ class _SignUpScreenState extends State<SignUpScreen>
                   errorText: _errorText.isNotEmpty ? _errorText: null,
                   border: const OutlineInputBorder(),
                   suffixIcon: IconButton(
-                     icon: Icon(
-                      _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                     ),
                      onPressed: () {
                       setState(() {
                         _obscurePassword =! _obscurePassword;
                       });
                      },
+                     icon: Icon(
+                      _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                     ),
                   ),
                 ),
+                obscureText:_obscurePassword,
                 ),
                  const SizedBox(height: 20),
                 ElevatedButton(

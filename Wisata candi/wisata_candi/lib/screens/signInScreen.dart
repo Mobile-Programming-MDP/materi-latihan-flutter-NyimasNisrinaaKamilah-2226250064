@@ -76,7 +76,9 @@ class _signInScreenState extends State<signInScreen> {
                       fontSize: 16
                     ),
                     recognizer: TapGestureRecognizer()
-                    ..onTap = () {},
+                    ..onTap = () {
+                      Navigator.pushNamed(context, '/signup');
+                    },
                   )
                 ]
               ),

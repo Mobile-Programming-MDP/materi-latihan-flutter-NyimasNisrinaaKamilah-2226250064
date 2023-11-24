@@ -1,10 +1,44 @@
+import 'dart:ffi';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisata_candi/models/candi.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget 
+{
+  const DetailScreen({super.key});
+
+  @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen>{
   final Candi candi;
-  const DetailScreen ({super.key, required this.candi});
+  bool isFavorite = false;
+  bool isSignedIn = false;
+
+  Future<void> _toggleFavorite() async 
+  {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    //Memeriksa apakah pengguna sudah sign in
+    if (isSignedIn)
+    {
+      //Jika belum sign in, arahkan le Signinscreen
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacementNamed(context, '/signin');
+      });
+      return;
+    }
+
+    bool favoriteStatus = !isFavorite;
+    prefs.setBool('favorite_${widget.candi.name}',favoriteStatus);
+
+    setState(() {
+      isFavorite = favoriteStatus;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
