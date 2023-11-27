@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:wisata_candi/screens/favorite_screen.dart';
 import 'package:wisata_candi/screens/home_screen.dart';
-// import 'package:wisata_candi/data/candi_data.dart';
-// import 'package:wisata_candi/screens/detail_screen.dart';
 import 'package:wisata_candi/screens/profile_screen.dart';
 import 'package:wisata_candi/screens/search_screen.dart';
 import 'package:wisata_candi/screens/signInScreen.dart';
 import 'package:wisata_candi/screens/signUpScreen.dart';
-// import 'package:wisata_candi/screens/SignInScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -45,7 +42,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/homescreen': (context) => const HomeScreen(),
-        'signin' : (context) => const signInScreen(), 
+        '/signin' : (context) => signInScreen(), 
         '/signup': (context) => const SignUpScreen(),
       },
     );

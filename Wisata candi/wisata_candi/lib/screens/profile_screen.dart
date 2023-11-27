@@ -10,13 +10,13 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   //TODO:1. Deklarasi variable (state) yang dibutuhkan
-  bool isSignIn = true;
-  String fullName = "Nyimas Nisrinaa Kamilah";
-  String userName = "Nyimas";
+  bool isSignedIn = true;
+  String fullName = '';
+  String userName = '';
   int favoritCandiCount = 2;
   late Color iconColor;
 
-  void signin()
+  void signIn()
   {
     Navigator.pushNamed(context, '/signin');
   }
@@ -52,7 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               AssetImage('images/placeholder_image.png'),
                         ),
                       ),
-                      if (isSignIn)
+                      if (isSignedIn)
                         IconButton(
                             onPressed: () {},
                             icon: Icon(
@@ -95,7 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         icon: Icons.person,
                         label: 'Nama',
                         value: fullName,
-                        showEditIcon: isSignIn,
+                        showEditIcon: isSignedIn,
                         onEditPressed: () {
                           debugPrint('Icon edit ditekan ...');
                         },
@@ -124,7 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    isSignIn
+                    isSignedIn
                         ? TextButton(
                             onPressed: () {},
                             child: Text('Sign Out'),

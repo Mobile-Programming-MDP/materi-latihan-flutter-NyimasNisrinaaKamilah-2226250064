@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class signInScreen extends StatefulWidget {
   signInScreen({super.key});
@@ -16,6 +17,57 @@ class _signInScreenState extends State<signInScreen> {
   String _errortext = ' ';
   bool _isSignedIn = false;
   bool _obscurePassword = true;
+
+  
+  void _signIn() async
+  {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String savedUsername = prefs.getString('username') ?? '';
+    final String savedPassword = prefs.getString('password') ?? '';
+    final String enteredUsername = _usernameController.text.trim();
+    final String enteredPassword = _passwordController.text.trim();
+
+    if(enteredUsername.isEmpty || enteredPassword.isEmpty)
+    {
+      setState(() {
+        _errortext = 'Nama pengguna dan kata sandi harus diisi.';
+      });
+      return;
+    }
+
+     if(savedUsername.isEmpty || savedPassword.isEmpty)
+    {
+      setState(() {
+        _errortext = 'Pengguna belum terdaftar. Silahkan daftar terlebih dahulu.';
+      });
+      return;
+    }
+
+    if(enteredUsername == savedUsername && enteredPassword == savedPassword)
+    {
+      setState(() {
+        _errortext = '';
+        _isSignedIn = true;
+        prefs.setBool('isSignedin', true);
+      });
+
+      //pemanggilan untuk menghapus semua halaman dalam tumpukan navigasi
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+       });
+
+      //Sign in berhasil navigasikan ke layar utama
+      WidgetsBinding.instance.addPostFrameCallback((_) { 
+        Navigator.pushReplacementNamed(context, '/');
+      });
+    }
+    else
+    {
+      setState(() {
+        _errortext = 'Nama pengguna atau Kata sandi salah.';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context){
@@ -41,7 +93,7 @@ class _signInScreenState extends State<signInScreen> {
                   border: OutlineInputBorder(),
                 ),
               ),
-              //TODO :6 Pasang TextFormField kata sandi
+              //TODO :6 Pasang TextForm Field kata sandi
               SizedBox(height: 20),
               TextFormField(
                 controller: _passwordController,
