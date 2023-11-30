@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//kelas signupscreen, tamoilanuntuk proses pendaftaran
+//kelas signupscreen, tampilanuntuk proses pendaftaran
 class signUpScreen extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
